@@ -1,0 +1,43 @@
+package config
+
+import (
+	"log"
+
+	"github.com/spf13/viper"
+)
+
+type Config struct {
+	AppName    string
+	ServerPort string
+
+	DBHost     string
+	DBPort     string
+	DBUser     string
+	DBPassword string
+	DBName     string
+
+	JWTSecret string
+}
+
+func Load() *Config {
+
+	viper.SetConfigFile(".env")
+
+	err := viper.ReadInConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return &Config{
+		AppName:    viper.GetString("APP_NAME"),
+		ServerPort: viper.GetString("SERVER_PORT"),
+
+		DBHost:     viper.GetString("DB_HOST"),
+		DBPort:     viper.GetString("DB_PORT"),
+		DBUser:     viper.GetString("DB_USER"),
+		DBPassword: viper.GetString("DB_PASSWORD"),
+		DBName:     viper.GetString("DB_NAME"),
+
+		JWTSecret: viper.GetString("JWT_SECRET"),
+	}
+}
