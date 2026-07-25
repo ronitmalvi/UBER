@@ -14,6 +14,9 @@
 # Vendor
 vendor/
 
+# Node
+node_modules
+
 # Environment
 .env
 
