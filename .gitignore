@@ -20,6 +20,9 @@ node_modules
 # Environment
 .env
 
+# Node 
+node_modules
+
 # IDE
 .vscode/
 .idea/
