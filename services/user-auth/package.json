@@ -1,0 +1,11 @@
+{
+  "name": "user-auth",
+  "version": "1.0.0",
+  "description": "node js application for user management",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "author": "durgesh",
+  "license": "ISC"
+}
