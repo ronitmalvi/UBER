@@ -1,6 +1,6 @@
 const express = require("express");
-
-// Initialize the Express application
+require("dotenv").config();
+import { Logdata } from "../user-auth/supaclient.js";
 const app = express();
 
 // Define the port number
@@ -9,6 +9,7 @@ const PORT = 3000;
 // Handle HTTP GET requests to the root URL ('/')
 app.get("/", (req, res) => {
   res.send("user-auth service");
+  Logdata();
 });
 
 // Start the server and listen on the specified port
