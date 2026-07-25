@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/ronitmalvi/uber-backend/internal/config"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/config"
 )
 
 func Health(cfg *config.Config) gin.HandlerFunc {

@@ -8,11 +8,13 @@ import (
 	"os/signal"    //Listens for OS signals. Ctrl+C  kill command  Docker stop
 	"syscall"      //Contains signal constants like SIGINT SIGTERM
 	"time"         //Used for timeout.
-	"github.com/ronitmalvi/uber-backend/internal/utils"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"github.com/ronitmalvi/uber-backend/internal/config"        //Loads environment variables.
-	"github.com/ronitmalvi/uber-backend/internal/routes"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/config"        //Loads environment variables.
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/routes"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/database"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/model"
 )
 
 func main() {
@@ -21,6 +23,14 @@ func main() {
 	defer utils.Logger.Sync()                //Logger.Sync() flushes buffered log entries before the application exits.
 
 	cfg := config.Load()
+	db, err := database.Connect(cfg)
+	db.AutoMigrate(
+		&model.Ride{},
+	)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	router := gin.Default()
 	routes.Register(router,cfg)
