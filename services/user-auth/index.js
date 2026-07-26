@@ -1,18 +1,24 @@
 const express = require("express");
+const { createClient } = require("@supabase/supabase-js");
+const { logdata } = require("./supaclient");
+const notFound = require("./middleware/notFound");
+const errorHandler = require("./middleware/errorhandler");
+
+const UserRouter = require("./routes/UserRouter");
+
 require("dotenv").config();
-import { Logdata } from "../user-auth/supaclient.js";
 const app = express();
 
-// Define the port number
-const PORT = 3000;
+app.use(express.json());
 
-// Handle HTTP GET requests to the root URL ('/')
-app.get("/", (req, res) => {
-  res.send("user-auth service");
-  Logdata();
+app.get("/testuser", async (req, res) => {
+  logdata(req, res);
 });
 
+app.use("/api/v1/user_auth", UserRouter);
+app.use(errorHandler);
+app.use(notFound);
 // Start the server and listen on the specified port
-app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running at http://localhost:${process.env.PORT}`);
 });
