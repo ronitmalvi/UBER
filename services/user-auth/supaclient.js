@@ -1,14 +1,17 @@
-import { createClient } from "@supabase/supabase-js";
-
+const { createClient } = require("@supabase/supabase-js");
+require("dotenv").config();
 // Create a single supabase client for interacting with your database
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_PUBLISHABLE_KEY,
 );
 
-const Logdata = () => {
-  const { data, error } = await supabase.from("UB_COM").select();
-  console.log(data);
+const logdata = async (req, res) => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: "durgesh3103@gmail.com",
+    password: "durgesh03",
+  });
+  res.send(data);
 };
 
-module.exports = {Logdata}
+module.exports = { logdata };
