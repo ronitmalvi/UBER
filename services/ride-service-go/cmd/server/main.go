@@ -16,6 +16,7 @@ import (
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/database"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/model"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/repository"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/service"
 )
 
 func main() {
@@ -30,16 +31,19 @@ func main() {
 	)
 	rideRepo := repository.NewRideRepository(db)
 
+	rideService := service.NewRideService(rideRepo)
+
 	ride := &model.Ride{
 
-		RiderID: 100,
+		RiderID: 11,
 
 		Status: model.RideRequested,
 
-		Fare: 300,
+		Fare: -10.0,
 	}
 
-	err = rideRepo.Create(ride)
+	rideService.CreateRide(ride)
+
 
 	if err != nil {
 
