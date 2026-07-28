@@ -5,12 +5,13 @@ package repository
 
 import ("github.com/ronitmalvi/UBER/ride-service-go/internal/model"
 		"gorm.io/gorm"
+        "fmt"
 )
 type RideRepository struct {                       // A RideRepository contains a database connection.
     db *gorm.DB
 }
 
-func NewRideRepository(
+func NewRideRepository(                             //Constructor function for RideRepository.
     db *gorm.DB,
 ) *RideRepository {
 
@@ -22,6 +23,6 @@ func NewRideRepository(
 func (r *RideRepository) Create(                        //r *RideRepository -> This function belongs to RideRepository.
     ride *model.Ride,
 ) error {
-
+    fmt.Println("Creating ride in the database...(repository layer)")
     return r.db.Create(ride).Error
 }

@@ -17,6 +17,7 @@ import (
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/model"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/repository"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/service"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/handler"
 )
 
 func main() {
@@ -29,20 +30,14 @@ func main() {
 	db.AutoMigrate(							//AutoMigrate() keeps schema up to date.
 		&model.Ride{},
 	)
+	
 	rideRepo := repository.NewRideRepository(db)
 
 	rideService := service.NewRideService(rideRepo)
 
-	ride := &model.Ride{
-
-		RiderID: 11,
-
-		Status: model.RideRequested,
-
-		Fare: -10.0,
-	}
-
-	rideService.CreateRide(ride)
+	rideHandler := handler.NewRideHandler(rideService)
+	router := gin.Default()
+	routes.RegisterRoutes(router, rideHandler)
 
 
 	if err != nil {
@@ -53,8 +48,7 @@ func main() {
 		)
 	}
 
-	router := gin.Default()
-	routes.Register(router,cfg)
+	
 
 	server :=&http.Server{
 		Addr: ":"+cfg.ServerPort,

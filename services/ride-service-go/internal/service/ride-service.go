@@ -33,7 +33,7 @@ func (s *RideService) CreateRide(
 	}
 
 	ride.Status = model.RideRequested
-
+	fmt.Println("Creating ride in the service layer...")
 	return s.repo.Create(ride)
 }
 
