@@ -11,14 +11,14 @@ const app = express();
 
 app.use(express.json());
 
-app.get("/testuser", async (req, res) => {
+app.get("/loginUser", async (req, res) => {
   logdata(req, res);
 });
 
 app.use("/api/v1/user_auth", UserRouter);
 app.use(errorHandler);
 app.use(notFound);
-// Start the server and listen on the specified port
+
 app.listen(process.env.PORT, () => {
   console.log(`Server is running at http://localhost:${process.env.PORT}`);
 });
