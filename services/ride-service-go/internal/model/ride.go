@@ -9,11 +9,22 @@ const (
 )
 
 type Ride struct {
-	gorm.Model
 
-	RiderID uint
+    gorm.Model
 
-	Status RideStatus
+    RiderID uint
 
-	Fare float64
+    DriverID *uint
+
+    PickupLatitude float64
+    PickupLongitude float64
+
+    DestinationLatitude float64
+    DestinationLongitude float64
+
+    EstimatedFare float64
+
+    FinalFare *float64
+
+    Status RideStatus
 }
