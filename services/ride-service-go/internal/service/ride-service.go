@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 	"fmt"
-
+	// "math"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/model"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/repository"
 )
@@ -27,7 +27,20 @@ func (s *RideService) CreateRide(
 	ride *model.Ride,
 ) error {
 
-	if ride.Fare <= 0 {
+	// distance := math.Sqrt(
+	// 		math.Pow(
+	// 			ride.DestinationLatitude-ride.PickupLatitude,
+	// 			2,
+	// 		) +
+	// 		math.Pow(
+	// 			ride.DestinationLongitude-ride.PickupLongitude,
+	// 			2,
+	// 		),
+	// 	)
+
+	ride.EstimatedFare = 250
+
+	if ride.EstimatedFare <= 0 {
 		fmt.Println("fare must be greater than zero")
 		return errors.New("fare must be greater than zero")
 	}

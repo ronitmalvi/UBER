@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"fmt"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/model"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/handler/dto"
 )
 
 type RideHandler struct {
@@ -21,25 +22,19 @@ func NewRideHandler(						//Constructor function for RideHandler.
 	}
 }
 
-type CreateRideRequest struct {
-
-	RiderID uint `json:"rider_id"`
-
-	Fare float64 `json:"fare"`
-}
-
 func (h *RideHandler) CreateRide(
 	c *gin.Context,
 ) {
 	fmt.Println("Creating ride...(handler layer)")
-	var req CreateRideRequest
+	var req dto.CreateRideRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 
 		c.JSON(
 			http.StatusBadRequest,
 			gin.H{
-				"error": err.Error(),
+				"success": false,
+				"message": err.Error(),
 			},
 		)
 		
@@ -47,7 +42,10 @@ func (h *RideHandler) CreateRide(
 	}
 	ride := &model.Ride{
 		RiderID: req.RiderID,
-		Fare:    req.Fare,
+		PickupLatitude: req.PickupLatitude,
+		PickupLongitude: req.PickupLongitude,
+		DestinationLatitude: req.DestinationLatitude,
+		DestinationLongitude: req.DestinationLongitude,
 	}
 
 	err := h.service.CreateRide(ride)
@@ -62,8 +60,12 @@ func (h *RideHandler) CreateRide(
 		return
 	}
 
-	c.JSON(
-		http.StatusCreated,
-		ride,
-	)
+	response := dto.CreateRideResponse{
+		ID:      ride.ID,
+		RiderID: ride.RiderID,
+		Status:  string(ride.Status),
+		Fare:    ride.EstimatedFare,
+	}
+
+	c.JSON(http.StatusCreated, response)
 }
