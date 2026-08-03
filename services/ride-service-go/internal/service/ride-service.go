@@ -2,10 +2,10 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	// "math"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/model"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/repository"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/handler/dto"
 )
 
 type RideService struct {						//stores the repository for ride service.
@@ -24,30 +24,59 @@ func NewRideService(
 
 //CreateRide creates a new ride in the database.
 func (s *RideService) CreateRide(
-	ride *model.Ride,
-) error {
+	req *dto.CreateRideRequest,
+) (*model.Ride, error) {
 
-	// distance := math.Sqrt(
-	// 		math.Pow(
-	// 			ride.DestinationLatitude-ride.PickupLatitude,
-	// 			2,
-	// 		) +
-	// 		math.Pow(
-	// 			ride.DestinationLongitude-ride.PickupLongitude,
-	// 			2,
-	// 		),
-	// 	)
-
-	ride.EstimatedFare = 250
-
-	if ride.EstimatedFare <= 0 {
-		fmt.Println("fare must be greater than zero")
-		return errors.New("fare must be greater than zero")
+	ride := &model.Ride{
+		RiderID: req.RiderID,
+		PickupLatitude: req.PickupLatitude,
+		PickupLongitude: req.PickupLongitude,
+		DestinationLatitude: req.DestinationLatitude,
+		DestinationLongitude: req.DestinationLongitude,
 	}
 
+	if err := s.ValidateRide(ride); err != nil {
+		return nil, err
+	}
+
+	s.initializeRide(ride)
+
+	s.calculateEstimatedFare(ride)
+
+	if err := s.repo.Create(ride); err != nil {
+		return nil, err
+	}
+
+	return ride, nil
+}
+
+func (s *RideService) ValidateRide(
+	ride *model.Ride,
+) error {
+	if ride.RiderID == 0 {
+		return errors.New("RiderID is required")
+	}
+
+	if ride.PickupLatitude == ride.DestinationLatitude &&
+		ride.PickupLongitude == ride.DestinationLongitude {
+
+		return errors.New("pickup and destination cannot be same")
+	}
+
+	return nil
+}
+
+func (s *RideService) initializeRide(
+	ride *model.Ride,
+) {
 	ride.Status = model.RideRequested
-	fmt.Println("Creating ride in the service layer...")
-	return s.repo.Create(ride)
+}
+
+func (s *RideService) calculateEstimatedFare(
+	ride *model.Ride,
+) {
+
+	ride.EstimatedFare = 250
 }
 
 

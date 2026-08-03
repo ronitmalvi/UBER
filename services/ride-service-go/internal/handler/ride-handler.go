@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"fmt"
-	"github.com/ronitmalvi/UBER/ride-service-go/internal/model"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/handler/dto"
 )
 
@@ -40,15 +39,9 @@ func (h *RideHandler) CreateRide(
 		
 		return
 	}
-	ride := &model.Ride{
-		RiderID: req.RiderID,
-		PickupLatitude: req.PickupLatitude,
-		PickupLongitude: req.PickupLongitude,
-		DestinationLatitude: req.DestinationLatitude,
-		DestinationLongitude: req.DestinationLongitude,
-	}
+	
 
-	err := h.service.CreateRide(ride)
+	ride, err := h.service.CreateRide(&req);
 
 	if err != nil {
 		c.JSON(
