@@ -50,6 +50,16 @@ func (s *RideService) CreateRide(
 	return ride, nil
 }
 
+func (s *RideService) GetRideByID(
+	id uint,
+) (*model.Ride, error){
+	ride, err := s.repo.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+	return ride, nil
+}
+
 func (s *RideService) ValidateRide(
 	ride *model.Ride,
 ) error {

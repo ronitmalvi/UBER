@@ -15,4 +15,8 @@ func RegisterRoutes(
 		"/rides",
 		rideHandler.CreateRide,
 	)
+	router.GET(
+		"/rides/:id",
+		rideHandler.GetRideByID,
+	)
 }

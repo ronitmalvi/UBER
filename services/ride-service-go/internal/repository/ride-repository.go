@@ -26,3 +26,13 @@ func (r *RideRepository) Create(                        //r *RideRepository -> T
     fmt.Println("Creating ride in the database...(repository layer)")
     return r.db.Create(ride).Error
 }
+
+func (r *RideRepository) GetByID(
+    id uint,
+) (*model.Ride, error){
+    var ride model.Ride
+    if err := r.db.First(&ride, id).Error; err != nil {
+        return nil, err
+    }
+    return &ride, nil
+}
