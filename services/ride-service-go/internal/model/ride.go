@@ -5,7 +5,13 @@ import "gorm.io/gorm"
 type RideStatus string
 
 const (
-	RideRequested RideStatus = "REQUESTED"
+	RideRequested       RideStatus = "REQUESTED"
+	RideSearchingDriver RideStatus = "SEARCHING_DRIVER"
+	RideDriverAssigned  RideStatus = "DRIVER_ASSIGNED"
+	RideDriverArrived   RideStatus = "DRIVER_ARRIVED"
+	RideStarted         RideStatus = "STARTED"
+	RideCompleted       RideStatus = "COMPLETED"
+	RideCancelled       RideStatus = "CANCELLED"
 )
 
 type Ride struct {
@@ -27,4 +33,8 @@ type Ride struct {
     FinalFare *float64
 
     Status RideStatus
+}
+
+func (r *Ride) UpdateStatus(status RideStatus) {
+	r.Status = status
 }
