@@ -29,6 +29,7 @@ func main() {
 	db, err := database.Connect(cfg)
 	db.AutoMigrate(							//AutoMigrate() keeps schema up to date.
 		&model.Ride{},
+		&model.Driver{},
 	)
 	
 	rideRepo := repository.NewRideRepository(db)
