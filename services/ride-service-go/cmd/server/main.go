@@ -18,6 +18,7 @@ import (
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/repository"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/service"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/handler"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/redis"
 )
 
 func main() {
@@ -31,6 +32,16 @@ func main() {
 		&model.Ride{},
 		&model.Driver{},
 	)
+
+	redisClient, err := redis.Connect(cfg)
+	if err != nil {
+		utils.Logger.Fatal(
+			"Failed to connect to Redis",
+			zap.Error(err),
+		)
+	}
+
+	utils.Logger.Info("Connected to Redis")
 	
 	rideRepo := repository.NewRideRepository(db)
 
