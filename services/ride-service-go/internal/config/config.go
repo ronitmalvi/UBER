@@ -17,6 +17,11 @@ type Config struct {
 	DBName     string
 	DBSSLMode string
 	JWTSecret string
+	RedisHost string
+	RedisPort string
+	RedisUsername string
+	RedisPassword string
+	RedisDB int
 }
 
 func Load() *Config {
@@ -39,5 +44,10 @@ func Load() *Config {
 		DBName:     viper.GetString("DB_NAME"),
 		DBSSLMode: viper.GetString("DB_SSLMODE"),
 		JWTSecret: viper.GetString("JWT_SECRET"),
+		RedisHost: viper.GetString("REDIS_HOST"),
+		RedisPort: viper.GetString("REDIS_PORT"),
+		RedisPassword: viper.GetString("REDIS_PASSWORD"),
+		RedisUsername: viper.GetString("REDIS_USERNAME"),
+		RedisDB: viper.GetInt("REDIS_DB"),
 	}
 }
