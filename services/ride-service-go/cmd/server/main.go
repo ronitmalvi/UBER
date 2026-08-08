@@ -34,6 +34,7 @@ func main() {
 	)
 
 	redisClient, err := redis.Connect(cfg)
+
 	if err != nil {
 		utils.Logger.Fatal(
 			"Failed to connect to Redis",
@@ -41,7 +42,7 @@ func main() {
 		)
 	}
 
-	utils.Logger.Info("Connected to Redis")
+	utils.Logger.Info("Connected to Redis" + redisClient.Options().Addr)
 	
 	rideRepo := repository.NewRideRepository(db)
 

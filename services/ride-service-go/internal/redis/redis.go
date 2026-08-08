@@ -13,6 +13,7 @@ func Connect(cfg *config.Config) (*goredis.Client, error) {
 
 	client := goredis.NewClient(&goredis.Options{
 		Addr:     fmt.Sprintf("%s:%s", cfg.RedisHost, cfg.RedisPort),
+		Username: cfg.RedisUsername,
 		Password: cfg.RedisPassword,
 		DB:       cfg.RedisDB,
 	})
