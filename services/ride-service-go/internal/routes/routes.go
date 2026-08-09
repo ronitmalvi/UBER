@@ -9,6 +9,7 @@ import (
 func RegisterRoutes(
 	router *gin.Engine,
 	rideHandler *handler.RideHandler,
+	driverHandler *handler.DriverHandler,
 ) {
 	fmt.Println("Registering routes...")
 	router.POST(
@@ -18,5 +19,9 @@ func RegisterRoutes(
 	router.GET(
 		"/rides/:id",
 		rideHandler.GetRideByID,
+	)
+	router.PUT(
+		"/drivers/:id/location",
+		driverHandler.UpdateLocation,
 	)
 }

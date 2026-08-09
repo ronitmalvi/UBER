@@ -1,3 +1,4 @@
+// Package redis provides Redis client initialization and utility functions.
 package redis
 
 import (
