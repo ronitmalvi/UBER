@@ -42,15 +42,22 @@ func main() {
 		)
 	}
 
-	utils.Logger.Info("Connected to Redis" + redisClient.Options().Addr)
+	utils.Logger.Info("Connected to Redis")
+
+	
 	
 	rideRepo := repository.NewRideRepository(db)
 
 	rideService := service.NewRideService(rideRepo)
 
 	rideHandler := handler.NewRideHandler(rideService)
+
+	driverRepo := repository.NewDriverRepository(db)
+	driverService := service.NewDriverService(driverRepo,redisClient)   //driverService updating both db and redis
+	driverHandler := handler.NewDriverHandler(driverService)
+
 	router := gin.Default()
-	routes.RegisterRoutes(router, rideHandler)
+	routes.RegisterRoutes(router, rideHandler, driverHandler)
 
 
 	if err != nil {
