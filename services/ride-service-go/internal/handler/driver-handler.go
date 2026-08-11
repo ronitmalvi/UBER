@@ -43,7 +43,14 @@ func (h *DriverHandler) UpdateLocation(c *gin.Context) {
 		req.Longitude,
 	)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update driver location"})
+
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error": err.Error(),
+			},
+		)
+
 		return
 	}
 
