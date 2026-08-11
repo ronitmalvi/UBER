@@ -25,3 +25,16 @@ func AddDriverLocation(
 		},
 	).Err()
 }
+
+func RemoveDriverLocation(
+	ctx context.Context,
+	client *goredis.Client,
+	driverID uint,
+) error {
+
+	return client.ZRem(
+		ctx,
+		"drivers",
+		strconv.FormatUint(uint64(driverID), 10),
+	).Err()
+}

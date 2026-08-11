@@ -24,4 +24,13 @@ func RegisterRoutes(
 		"/drivers/:id/location",
 		driverHandler.UpdateLocation,
 	)
+	router.POST(
+		"/drivers/:id/online",
+		driverHandler.GoOnline,
+	)
+
+	router.POST(
+		"/drivers/:id/offline",
+		driverHandler.GoOffline,
+	)
 }

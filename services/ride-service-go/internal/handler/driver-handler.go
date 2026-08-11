@@ -61,3 +61,77 @@ func (h *DriverHandler) UpdateLocation(c *gin.Context) {
 		},
 	)
 }
+
+func (h *DriverHandler) GoOnline(c *gin.Context) {
+
+	driverID, err := strconv.ParseUint(
+		c.Param("id"),
+		10,
+		64,
+	)
+
+	if err != nil {
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{"error": "invalid driver ID"},
+		)
+		return
+	}
+
+	err = h.service.GoOnline(
+		c.Request.Context(),
+		uint(driverID),
+	)
+
+	if err != nil {
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{"error": err.Error()},
+		)
+		return
+	}
+
+	c.JSON(
+		http.StatusOK,
+		gin.H{
+			"message": "driver is now online",
+		},
+	)
+}
+
+func (h *DriverHandler) GoOffline(c *gin.Context) {
+
+	driverID, err := strconv.ParseUint(
+		c.Param("id"),
+		10,
+		64,
+	)
+
+	if err != nil {
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{"error": "invalid driver ID"},
+		)
+		return
+	}
+
+	err = h.service.GoOffline(
+		c.Request.Context(),
+		uint(driverID),
+	)
+
+	if err != nil {
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{"error": err.Error()},
+		)
+		return
+	}
+
+	c.JSON(
+		http.StatusOK,
+		gin.H{
+			"message": "driver is now offline",
+		},
+	)
+}
