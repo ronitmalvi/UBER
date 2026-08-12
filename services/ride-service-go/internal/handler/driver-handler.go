@@ -20,6 +20,34 @@ func NewDriverHandler(
 	}
 }
 
+func (h *DriverHandler) CreateDriver(c *gin.Context) {
+	var req dto.CreateDriverRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	driver, err := h.service.CreateDriver(&req)
+	if err != nil {
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{
+				"error": err.Error(),
+			},
+		)
+		return
+	}
+
+	c.JSON(
+		http.StatusCreated,
+		gin.H{
+			"message": "driver created successfully",
+			"driver":  driver,
+		},
+	)
+}
+
 func (h *DriverHandler) UpdateLocation(c *gin.Context) {
 	driverIDParam := c.Param("id")
 
@@ -58,6 +86,80 @@ func (h *DriverHandler) UpdateLocation(c *gin.Context) {
 		http.StatusOK,
 		gin.H{
 			"message": "driver location updated successfully",
+		},
+	)
+}
+
+func (h *DriverHandler) GoOnline(c *gin.Context) {
+
+	driverID, err := strconv.ParseUint(
+		c.Param("id"),
+		10,
+		64,
+	)
+
+	if err != nil {
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{"error": "invalid driver ID"},
+		)
+		return
+	}
+
+	err = h.service.GoOnline(
+		c.Request.Context(),
+		uint(driverID),
+	)
+
+	if err != nil {
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{"error": err.Error()},
+		)
+		return
+	}
+
+	c.JSON(
+		http.StatusOK,
+		gin.H{
+			"message": "driver is now online",
+		},
+	)
+}
+
+func (h *DriverHandler) GoOffline(c *gin.Context) {
+
+	driverID, err := strconv.ParseUint(
+		c.Param("id"),
+		10,
+		64,
+	)
+
+	if err != nil {
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{"error": "invalid driver ID"},
+		)
+		return
+	}
+
+	err = h.service.GoOffline(
+		c.Request.Context(),
+		uint(driverID),
+	)
+
+	if err != nil {
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{"error": err.Error()},
+		)
+		return
+	}
+
+	c.JSON(
+		http.StatusOK,
+		gin.H{
+			"message": "driver is now offline",
 		},
 	)
 }
