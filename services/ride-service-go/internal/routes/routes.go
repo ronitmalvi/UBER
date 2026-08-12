@@ -33,4 +33,9 @@ func RegisterRoutes(
 		"/drivers/:id/offline",
 		driverHandler.GoOffline,
 	)
+
+	router.POST(
+		"/drivers",
+		driverHandler.CreateDriver,
+	)
 }

@@ -20,6 +20,34 @@ func NewDriverHandler(
 	}
 }
 
+func (h *DriverHandler) CreateDriver(c *gin.Context) {
+	var req dto.CreateDriverRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	driver, err := h.service.CreateDriver(&req)
+	if err != nil {
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{
+				"error": err.Error(),
+			},
+		)
+		return
+	}
+
+	c.JSON(
+		http.StatusCreated,
+		gin.H{
+			"message": "driver created successfully",
+			"driver":  driver,
+		},
+	)
+}
+
 func (h *DriverHandler) UpdateLocation(c *gin.Context) {
 	driverIDParam := c.Param("id")
 
