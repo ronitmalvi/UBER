@@ -163,3 +163,48 @@ func (h *DriverHandler) GoOffline(c *gin.Context) {
 		},
 	)
 }
+
+func (h *DriverHandler) FindNearbyDrivers(c *gin.Context) {
+
+	var req struct {
+		Latitude  float64 `json:"latitude" binding:"required"`
+		Longitude float64 `json:"longitude" binding:"required"`
+		RadiusKm  float64 `json:"radius_km" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error": err.Error(),
+			},
+		)
+
+		return
+	}
+
+	drivers, err := h.service.FindNearbyDrivers(
+		c.Request.Context(),
+		req.Latitude,
+		req.Longitude,
+		req.RadiusKm,
+	)
+
+	if err != nil {
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error": err.Error(),
+			},
+		)
+
+		return
+	}
+
+	c.JSON(
+		http.StatusOK,
+		gin.H{
+			"drivers": drivers,
+		},
+	)
+}
