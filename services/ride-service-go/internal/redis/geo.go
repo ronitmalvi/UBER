@@ -38,3 +38,35 @@ func RemoveDriverLocation(
 		strconv.FormatUint(uint64(driverID), 10),
 	).Err()
 }
+
+func FindNearbyDrivers(
+	ctx context.Context,
+	client *goredis.Client,
+	latitude float64,
+	longitude float64,
+	radiusKm float64,
+) ([]goredis.GeoLocation, error) {
+
+	results, err := client.GeoSearchLocation(
+		ctx,
+		"drivers",
+		&goredis.GeoSearchLocationQuery{
+			GeoSearchQuery: goredis.GeoSearchQuery{
+				Longitude:  longitude,
+				Latitude:   latitude,
+				Radius:     radiusKm,
+				RadiusUnit: "km",
+				Sort:      "ASC",
+			},
+			WithDist: true,
+			WithCoord: true,
+			
+		},
+	).Result()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return results, nil
+}

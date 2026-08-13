@@ -38,4 +38,9 @@ func RegisterRoutes(
 		"/drivers",
 		driverHandler.CreateDriver,
 	)
+
+	router.POST(
+		"/drivers/nearby",
+		driverHandler.FindNearbyDrivers,
+	)
 }

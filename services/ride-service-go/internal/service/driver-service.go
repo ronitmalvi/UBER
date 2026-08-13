@@ -117,3 +117,27 @@ func (s *DriverService) GoOffline(
 		driverID,
 	)
 }
+
+func (s *DriverService) FindNearbyDrivers(
+	ctx context.Context,
+	latitude float64,
+	longitude float64,
+	radiusKm float64,
+) ([]goredis.GeoLocation, error) {
+
+	if err := validateCoordinates(latitude, longitude); err != nil {
+		return nil, err
+	}
+
+	if radiusKm <= 0 {
+		return nil, fmt.Errorf("radius must be greater than zero")
+	}
+
+	return redis.FindNearbyDrivers(
+		ctx,
+		s.redisClient,
+		latitude,
+		longitude,
+		radiusKm,
+	)
+}
