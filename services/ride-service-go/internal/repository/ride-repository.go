@@ -36,3 +36,10 @@ func (r *RideRepository) GetByID(
     }
     return &ride, nil
 }
+
+func (r *RideRepository) Update(
+	ride *model.Ride,
+) error {
+
+	return r.db.Save(ride).Error
+}
