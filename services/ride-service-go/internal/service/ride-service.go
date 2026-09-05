@@ -2,23 +2,26 @@ package service
 
 import (
 	"errors"
-	// "math"
+	"context"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/model"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/repository"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/handler/dto"
 )
 
-type RideService struct {						//stores the repository for ride service.
-	repo *repository.RideRepository
+type RideService struct {					
+	repo *repository.RideRepository  //stores the repository for ride service.
+	driverMatcher DriverMatcher  //stores the driver matcher for ride service.
 }
 
 //Constructor function for RideService.
 func NewRideService(
 	repo *repository.RideRepository,
+	driverMatcher DriverMatcher,
 ) *RideService {
 
 	return &RideService{
 		repo: repo,
+		driverMatcher: driverMatcher,
 	}
 }
 
@@ -46,7 +49,20 @@ func (s *RideService) CreateRide(
 	if err := s.repo.Create(ride); err != nil {
 		return nil, err
 	}
-
+	bestDriver, err := s.driverMatcher.FindBestDriver(
+		context.Background(),
+		ride.PickupLatitude,
+		ride.PickupLongitude,
+		5,
+	)
+	if err != nil {
+		return ride, nil
+	}
+	ride.DriverID = &bestDriver.DriverID
+	ride.Status = model.RideDriverAssigned
+	if err := s.repo.Update(ride); err != nil {
+		return nil, err
+	}
 	return ride, nil
 }
 

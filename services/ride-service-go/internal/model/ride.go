@@ -20,7 +20,7 @@ type Ride struct {
 
     RiderID uint
 
-    DriverID *uint
+    DriverID *uint  // Pointer to allow null value when no driver is assigned
 
     PickupLatitude float64
     PickupLongitude float64
@@ -30,7 +30,7 @@ type Ride struct {
 
     EstimatedFare float64
 
-    FinalFare *float64
+    FinalFare *float64  // Pointer to allow null value when final fare is not yet calculated
 
     Status RideStatus
 }
