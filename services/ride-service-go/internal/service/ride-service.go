@@ -27,6 +27,7 @@ func NewRideService(
 
 //CreateRide creates a new ride in the database.
 func (s *RideService) CreateRide(
+	ctx context.Context,
 	req *dto.CreateRideRequest,
 ) (*model.Ride, error) {
 
@@ -60,6 +61,12 @@ func (s *RideService) CreateRide(
 	}
 	ride.DriverID = &bestDriver.DriverID
 	ride.Status = model.RideDriverAssigned
+	if err := s.driverMatcher.MarkBusy(
+		ctx,
+		bestDriver.DriverID,
+	); err != nil {
+		return nil, err
+	}
 	if err := s.repo.Update(ride); err != nil {
 		return nil, err
 	}

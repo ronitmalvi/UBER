@@ -42,7 +42,7 @@ func (h *RideHandler) CreateRide(
 	}
 	
 
-	ride, err := h.service.CreateRide(&req);
+	ride, err := h.service.CreateRide(c.Request.Context(),&req);
 
 	if err != nil {
 		c.JSON(

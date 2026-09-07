@@ -204,3 +204,22 @@ func (s *DriverService) FindBestDriver(
 		Distance: best.Dist,
 	}, nil
 }
+
+func (s *DriverService) MarkBusy(ctx context.Context, driverID uint) error {
+	driver, err := s.repo.GetByID(driverID)
+	if err != nil {
+		return fmt.Errorf("failed to retrieve driver: %w", err)
+	}
+
+	driver.IsAvailable = false
+
+	if err := s.repo.Update(driver); err != nil {
+		return err
+	}
+
+	return redis.RemoveDriverLocation(
+		ctx,
+		s.redisClient,
+		driverID,
+	)
+}

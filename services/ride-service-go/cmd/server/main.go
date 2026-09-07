@@ -56,13 +56,13 @@ func main() {
 	routes.RegisterRoutes(router, rideHandler, driverHandler)
 
 
-	if err != nil {
+	// if err != nil {
 
-		utils.Logger.Fatal(
-			"Insert failed",
-			zap.Error(err),
-		)
-	}
+	// 	utils.Logger.Fatal(
+	// 		"Insert failed",
+	// 		zap.Error(err),
+	// 	)
+	// }
 
 	
 

@@ -12,4 +12,8 @@ type DriverMatcher interface {
 		longitude float64,
 		radiusKm float64,
 	) (*dto.BestDriver, error)
+	MarkBusy(
+		ctx context.Context,
+		driverID uint,
+	) error
 }
