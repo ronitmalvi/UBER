@@ -1,8 +1,8 @@
-package service
+package dservice
 
 import (
 	"context"
-	"github.com/ronitmalvi/UBER/ride-service-go/internal/handler/dto"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/driver/dhandler/dto"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/redis"
 	"strconv"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/errors"

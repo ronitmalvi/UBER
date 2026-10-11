@@ -2,14 +2,15 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/ronitmalvi/UBER/ride-service-go/internal/handler"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/ride/handler"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/driver/dhandler"
 	"fmt"
 )
 
 func RegisterRoutes(
 	router *gin.Engine,
 	rideHandler *handler.RideHandler,
-	driverHandler *handler.DriverHandler,
+	driverHandler *dhandler.DriverHandler,
 ) {
 	fmt.Println("Registering routes...")
 	router.POST(

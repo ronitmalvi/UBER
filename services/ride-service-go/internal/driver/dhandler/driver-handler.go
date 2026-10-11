@@ -1,19 +1,19 @@
-package handler
+package dhandler
 
 import (
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/ronitmalvi/UBER/ride-service-go/internal/handler/dto"
-	"github.com/ronitmalvi/UBER/ride-service-go/internal/service"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/driver/dservice"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/driver/dhandler/dto"
 )
 type DriverHandler struct {
-	service *service.DriverService
+	service *dservice.DriverService
 }
 
 func NewDriverHandler(
-	service *service.DriverService,
+	service *dservice.DriverService,
 ) *DriverHandler{
 	return &DriverHandler{
 		service: service,

@@ -15,10 +15,14 @@ import (
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/routes"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/database"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/model"
-	"github.com/ronitmalvi/UBER/ride-service-go/internal/repository"
-	"github.com/ronitmalvi/UBER/ride-service-go/internal/service"
-	"github.com/ronitmalvi/UBER/ride-service-go/internal/handler"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/ride/repository"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/driver/drepository"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/ride/service"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/driver/dservice"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/ride/handler"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/driver/dhandler"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/redis"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/event"
 )
 
 func main() {
@@ -43,14 +47,17 @@ func main() {
 	}
 
 	utils.Logger.Info("Connected to Redis")
-
-	driverRepo := repository.NewDriverRepository(db)
-	driverService := service.NewDriverService(driverRepo,redisClient)   //driverService updating both db and redis
-	driverHandler := handler.NewDriverHandler(driverService)
-
+	bus := event.NewInMemoryBus()  //Creates a new instance of InMemoryBus. InMemoryBus is an implementation of the event.Bus interface that allows for in-memory event handling.
+	driverRepo := drepository.NewDriverRepository(db)
+	driverService := dservice.NewDriverService(driverRepo,redisClient, bus)   //driverService updating both db and redis
+	driverHandler := dhandler.NewDriverHandler(driverService)
 	rideRepo := repository.NewRideRepository(db)
-	rideService := service.NewRideService(rideRepo, driverService)
+	rideService := service.NewRideService(rideRepo, driverService,bus)
 	rideHandler := handler.NewRideHandler(rideService)
+	bus.Subscribe(
+		"ride.requested",
+		driverService.HandleRideRequested,
+	)
 
 	router := gin.Default()
 	routes.RegisterRoutes(router, rideHandler, driverHandler)
