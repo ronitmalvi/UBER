@@ -6,6 +6,7 @@ const authenticate = async (req, res, next) => {
   const token = authHeader?.split(" ")[1];
 
   if (!token) {
+    throw new Error("Database connection failed");
     return res.status(401).json({ error: "Missing token" });
   }
 
@@ -15,7 +16,9 @@ const authenticate = async (req, res, next) => {
   } = await supabase.auth.getUser(token);
 
   if (error || !user) {
-    return res.status(401).json({ error: "Invalid or expired token" });
+    return res
+      .status(401)
+      .json({ error: "Invalid or expired token", detailed_error: error });
   }
 
   req.user = user;
