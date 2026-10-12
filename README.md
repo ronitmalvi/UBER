@@ -1,6 +1,7 @@
 # Project Structure
 
-This UBER project follows a layered architecture to keep the codebase clean, modular, and easy to maintain. Each directory has a specific responsibility.
+This UBER project follows a layered architecture to keep the codebase clean, modular, and easy to maintain. 
+Each directory has a specific responsibility.
 
 ```
 uber-platform/
