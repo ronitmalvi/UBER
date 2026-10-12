@@ -35,6 +35,4 @@ uber-platform/
 ├── docs/
 │
 ├── scripts/
-│
-└── README.md
 ```
