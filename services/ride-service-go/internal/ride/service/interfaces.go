@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"github.com/ronitmalvi/UBER/ride-service-go/internal/handler/dto"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/driver/dhandler/dto"
 )
 
 type DriverMatcher interface {

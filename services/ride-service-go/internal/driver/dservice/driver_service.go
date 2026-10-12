@@ -1,24 +1,28 @@
-package service
+package dservice
 
 import (
 	goredis "github.com/redis/go-redis/v9"
-	"github.com/ronitmalvi/UBER/ride-service-go/internal/repository"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/driver/drepository"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/model"
-	"github.com/ronitmalvi/UBER/ride-service-go/internal/handler/dto"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/driver/dhandler/dto"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/event"
 )
 
 type DriverService struct {
-	repo *repository.DriverRepository
+	repo *drepository.DriverRepository
 	redisClient *goredis.Client
+	eventBus event.Bus
 }
 
 func NewDriverService(
-	repo *repository.DriverRepository,
+	repo *drepository.DriverRepository,
 	redisClient *goredis.Client,
+	eventBus event.Bus,
 ) *DriverService {
 	return &DriverService{
 		repo: repo,
 		redisClient: redisClient,
+		eventBus: eventBus,
 	}
 }
 

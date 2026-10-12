@@ -1,12 +1,12 @@
 package handler
 
 import (
-	"github.com/ronitmalvi/UBER/ride-service-go/internal/service"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/ride/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"fmt"
 	"strconv"
-	"github.com/ronitmalvi/UBER/ride-service-go/internal/handler/dto"
+	"github.com/ronitmalvi/UBER/ride-service-go/internal/ride/handler/dto"
 )
 
 type RideHandler struct {
