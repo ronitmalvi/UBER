@@ -16,34 +16,8 @@ func (s *DriverService) HandleRideRequested(
 		return errors.New("invalid event type")
 	}
 
-	bestDriver, err := s.FindBestDriver(
+	return s.AssignDriverToRide(
 		ctx,
-		rideRequested.PickupLatitude,
-		rideRequested.PickupLongitude,
-		5,
+		rideRequested,
 	)
-	if err != nil {
-		return err
-	}
-
-	if err := s.MarkBusy(
-		ctx,
-		bestDriver.DriverID,
-	); err != nil {
-		return err
-	}
-
-	driverAssigned := event.DriverAssigned{
-		RideID:   rideRequested.RideID,
-		DriverID: bestDriver.DriverID,
-	}
-
-	if err := s.eventBus.Publish(
-		ctx,
-		driverAssigned,
-	); err != nil {
-		return err
-	}
-
-	return nil
 }

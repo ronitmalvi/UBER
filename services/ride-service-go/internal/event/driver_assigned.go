@@ -6,5 +6,5 @@ type DriverAssigned struct {
 }
 
 func (DriverAssigned) Name() string {
-	return "driver.assigned"
+	return EventDriverAssigned		//driver.assigned event name
 }

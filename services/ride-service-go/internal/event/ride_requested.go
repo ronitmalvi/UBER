@@ -8,5 +8,5 @@ type RideRequested struct {
 }
 
 func (RideRequested) Name() string {
-	return "ride.requested"				//ride.requested event name
+	return EventRideRequested			//ride.requested event name
 }

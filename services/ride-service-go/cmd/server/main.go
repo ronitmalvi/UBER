@@ -55,9 +55,10 @@ func main() {
 	rideService := service.NewRideService(rideRepo, driverService,bus)
 	rideHandler := handler.NewRideHandler(rideService)
 	bus.Subscribe(
-		"ride.requested",
+		event.EventRideRequested,
 		driverService.HandleRideRequested,
 	)
+	bus.Subscribe(event.EventDriverAssigned, rideService.HandleDriverAssigned)
 
 	router := gin.Default()
 	routes.RegisterRoutes(router, rideHandler, driverHandler)
