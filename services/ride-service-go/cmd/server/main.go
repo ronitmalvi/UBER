@@ -32,10 +32,22 @@ func main() {
 
 	cfg := config.Load()
 	db, err := database.Connect(cfg)
-	db.AutoMigrate(							//AutoMigrate() keeps schema up to date.
+	if err != nil {
+		utils.Logger.Fatal(
+			"Failed to connect to PostgreSQL",
+			zap.Error(err),
+		)
+	}
+
+	if err := db.AutoMigrate(				//AutoMigrate automatically migrates your schema, to keep your schema up to date.
 		&model.Ride{},
 		&model.Driver{},
-	)
+	); err != nil {
+		utils.Logger.Fatal(
+			"Failed to migrate database",
+			zap.Error(err),
+		)
+	}
 
 	redisClient, err := redis.Connect(cfg)
 
@@ -52,7 +64,7 @@ func main() {
 	driverService := dservice.NewDriverService(driverRepo,redisClient, bus)   //driverService updating both db and redis
 	driverHandler := dhandler.NewDriverHandler(driverService)
 	rideRepo := repository.NewRideRepository(db)
-	rideService := service.NewRideService(rideRepo, driverService,bus)
+	rideService := service.NewRideService(rideRepo,bus)
 	rideHandler := handler.NewRideHandler(rideService)
 	bus.Subscribe(
 		event.EventRideRequested,

@@ -7,8 +7,11 @@ import (
 )
 
 
-func (s *DriverService) GoOnline(ctx context.Context, driverID uint) error {
-	// Update the driver's online status in the database
+
+func (s *DriverService) GoOnline(
+	ctx context.Context,
+	driverID uint,
+) error {
 	driver, err := s.repo.GetByID(driverID)
 	if err != nil {
 		return fmt.Errorf("failed to retrieve driver: %w", err)
@@ -17,8 +20,13 @@ func (s *DriverService) GoOnline(ctx context.Context, driverID uint) error {
 	driver.IsOnline = true
 	driver.IsAvailable = true
 
-	return s.repo.Update(driver)
+	if err := s.repo.Update(driver); err != nil {
+		return err
+	}
+
+	return nil
 }
+
 
 func (s *DriverService) GoOffline(
 	ctx context.Context,
