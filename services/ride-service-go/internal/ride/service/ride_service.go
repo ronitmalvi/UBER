@@ -4,27 +4,23 @@ import (
 	"errors"
 	"context"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/model"
-	"github.com/ronitmalvi/UBER/ride-service-go/internal/ride/repository"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/ride/handler/dto"
 	"github.com/ronitmalvi/UBER/ride-service-go/internal/event"
 )
 
 type RideService struct {					
-	repo *repository.RideRepository  //stores the repository for ride service.
-	driverMatcher DriverMatcher  //stores the driver matcher for ride service.
+	repo RideRepository  //stores the repository for ride service.
 	eventBus event.Bus  //stores the event bus for ride service.
 }
 
 //Constructor function for RideService.
 func NewRideService(
-	repo *repository.RideRepository,
-	driverMatcher DriverMatcher,
+	repo RideRepository,
 	bus event.Bus,
 ) *RideService {
 
 	return &RideService{
 		repo: repo,
-		driverMatcher: driverMatcher,
 		eventBus: bus,
 	}
 }
